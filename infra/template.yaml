@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: DBZ Word Scramble Game - EC2 Deployment
+
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to SSH into the instance
+
+Resources:
+
+  # -----------------------------
+  # Security Group
+  # -----------------------------
+  GameSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP traffic for DBZ Game
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  # -----------------------------
+  # EC2 Instance
+  # -----------------------------
+  GameServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.micro
+      ImageId: ami-0c02fb55956c7d316   # Amazon Linux 2 (us-east-1)
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !Ref GameSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y python3 git
+
+          # Install pip
+          curl -O https://bootstrap.pypa.io/get-pip.py
+          python3 get-pip.py
+
+          # Clone your GitHub repo
+          cd /home/ec2-user
+          git clone https://github.com/YOUR_USERNAME/dbz_word_scramble.git
+          cd dbz_word_scramble
+
+          # Install Python dependencies
+          pip3 install -r requirements.txt
+
+          # Run the Flask app
+          nohup python3 app.py > app.log 2>&1 &
+
+Outputs:
+  PublicIP:
+    Description: Public IP of the DBZ Word Scramble Game
+    Value: !GetAtt GameServer.PublicIp
