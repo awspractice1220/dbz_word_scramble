@@ -21,6 +21,11 @@ const scoreValueEl = document.getElementById("scoreValue");
 const difficultyValueEl = document.getElementById("difficultyValue");
 const streakValueEl = document.getElementById("streakValue");
 const statusBadgeEl = document.getElementById("statusBadge");
+const characterArtEl = document.getElementById("characterArt");
+const characterLabelEl = document.getElementById("characterLabel");
+const leaderboardListEl = document.getElementById("leaderboardList");
+const leaderboardKey = "dbzWordScrambleLeaderboard";
+let leaderboard = [];
 
 async function getNewWord() {
     const res = await fetch("/api/new-word");
@@ -30,6 +35,9 @@ async function getNewWord() {
     hintValueEl.textContent = data.hint;
     difficultyValueEl.textContent = data.difficulty;
     statusBadgeEl.textContent = "New challenge loaded";
+    characterArtEl.src = data.character_image || "/static/images/dbz01.png";
+    characterArtEl.alt = `DBZ art for ${data.character_name || 'fighter'}`;
+    characterLabelEl.textContent = data.character_name || "Featured fighter";
     answerInput.value = "";
     answerInput.focus();
 }
@@ -54,8 +62,61 @@ async function submitAnswer() {
     statusBadgeEl.textContent = data.message;
 
     if (data.correct) {
+        updateLeaderboard(data.score);
         setTimeout(getNewWord, 600);
     }
+}
+
+function getSavedLeaderboard() {
+    const stored = localStorage.getItem(leaderboardKey);
+    if (stored) {
+        return JSON.parse(stored);
+    }
+    return [
+        { name: "Legend", score: 150 },
+        { name: "Saiyan", score: 120 },
+        { name: "Hero", score: 90 },
+    ];
+}
+
+function saveLeaderboard() {
+    localStorage.setItem(leaderboardKey, JSON.stringify(leaderboard));
+}
+
+function renderLeaderboard() {
+    if (!leaderboard.length) {
+        leaderboardListEl.innerHTML = '<li>No scores yet. Solve a few words to earn a spot.</li>';
+        return;
+    }
+
+    leaderboardListEl.innerHTML = leaderboard
+        .slice(0, 5)
+        .map((entry, index) => `
+            <li class="${index === 0 ? 'active' : ''}">
+                <span>${entry.name}</span>
+                <strong>${entry.score}</strong>
+            </li>
+        `)
+        .join("");
+}
+
+function updateLeaderboard(score) {
+    if (score <= 0) {
+        return;
+    }
+
+    if (leaderboard.length < 5 || score > leaderboard[leaderboard.length - 1].score) {
+        leaderboard.push({ name: "YOU", score });
+        leaderboard.sort((a, b) => b.score - a.score);
+        leaderboard = leaderboard.slice(0, 5);
+        saveLeaderboard();
+        renderLeaderboard();
+    }
+}
+
+function initLeaderboard() {
+    leaderboard = getSavedLeaderboard();
+    renderLeaderboard();
 }
 
 async function resetGame() {
@@ -186,4 +247,5 @@ function drawHand(angle, length, width, color) {
 }
 
 drawClock();
+initLeaderboard();
 getNewWord();

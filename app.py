@@ -7,21 +7,21 @@ from flask import Flask, jsonify, render_template, request
 app = Flask(__name__)
 
 CHARACTERS = [
-    {"name": "goku", "hint": "The spirited Saiyan hero who never stops training."},
-    {"name": "vegeta", "hint": "The proud prince of all Saiyans with a fierce rivalry."},
-    {"name": "gohan", "hint": "The son of Goku who grows into a powerful protector."},
-    {"name": "trunks", "hint": "The half-Saiyan warrior with a bold sword style."},
-    {"name": "piccolo", "hint": "The Namekian strategist and guardian of Earth."},
-    {"name": "krillin", "hint": "The brave martial artist with a loyal heart."},
-    {"name": "bulma", "hint": "The brilliant scientist behind many of the team’s inventions."},
-    {"name": "frieza", "hint": "The galactic tyrant who commands fear and power."},
-    {"name": "cell", "hint": "The perfect android monster built for destruction."},
-    {"name": "beerus", "hint": "The god of destruction who loves good food and battle."},
-    {"name": "broly", "hint": "A legendary Saiyan known for unstoppable rage."},
-    {"name": "whis", "hint": "The wise angel who teaches discipline and balance."},
-    {"name": "goten", "hint": "The younger Saiyan child with a bright future."},
-    {"name": "android18", "hint": "The cool-headed android with incredible combat skill."},
-    {"name": "majinbuu", "hint": "A mischievous magical being with chaotic power."},
+    {"name": "goku", "hint": "The spirited Saiyan hero who never stops training.", "image": "/static/images/dbz01.png"},
+    {"name": "vegeta", "hint": "The proud prince of all Saiyans with a fierce rivalry.", "image": "/static/images/dbz02.png"},
+    {"name": "gohan", "hint": "The son of Goku who grows into a powerful protector.", "image": "/static/images/dbz01.png"},
+    {"name": "trunks", "hint": "The half-Saiyan warrior with a bold sword style.", "image": "/static/images/dbz02.png"},
+    {"name": "piccolo", "hint": "The Namekian strategist and guardian of Earth.", "image": "/static/images/dbz01.png"},
+    {"name": "krillin", "hint": "The brave martial artist with a loyal heart.", "image": "/static/images/dbz01.png"},
+    {"name": "bulma", "hint": "The brilliant scientist behind many of the team’s inventions.", "image": "/static/images/dbz02.png"},
+    {"name": "frieza", "hint": "The galactic tyrant who commands fear and power.", "image": "/static/images/dbz02.png"},
+    {"name": "cell", "hint": "The perfect android monster built for destruction.", "image": "/static/images/dbz02.png"},
+    {"name": "beerus", "hint": "The god of destruction who loves good food and battle.", "image": "/static/images/dbz02.png"},
+    {"name": "broly", "hint": "A legendary Saiyan known for unstoppable rage.", "image": "/static/images/dbz01.png"},
+    {"name": "whis", "hint": "The wise angel who teaches discipline and balance.", "image": "/static/images/dbz02.png"},
+    {"name": "goten", "hint": "The younger Saiyan child with a bright future.", "image": "/static/images/dbz01.png"},
+    {"name": "android18", "hint": "The cool-headed android with incredible combat skill.", "image": "/static/images/dbz02.png"},
+    {"name": "majinbuu", "hint": "A mischievous magical being with chaotic power.", "image": "/static/images/dbz02.png"},
 ]
 
 
@@ -71,6 +71,8 @@ def new_word():
         "difficulty": game_state["difficulty"],
         "hint": character["hint"],
         "answer": word,
+        "character_image": character["image"],
+        "character_name": character["name"].upper(),
     })
 
 
