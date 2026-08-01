@@ -11,7 +11,8 @@ function rotateCursor() {
     document.body.style.cursor = `url('${sneakers[cursorIndex]}'), auto`;
 }
 
-setInterval(rotateCursor, 120000);
+setInterval(rotateCursor, 15000);
+rotateCursor();
 
 const answerInput = document.getElementById("answerInput");
 const scrambledWordEl = document.getElementById("scrambledWord");
@@ -94,40 +95,80 @@ function drawClock() {
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
 
-    ctx.beginPath();
-    ctx.arc(0, 0, 92, 0, Math.PI * 2);
-    ctx.strokeStyle = "#f6d76b";
-    ctx.lineWidth = 8;
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = "#f6d76b";
-    ctx.stroke();
+    const outerRadius = 118;
+    const innerRadius = 92;
+
+    const bezelGradient = ctx.createRadialGradient(0, 0, 24, 0, 0, outerRadius);
+    bezelGradient.addColorStop(0, '#fff9ed');
+    bezelGradient.addColorStop(0.35, '#ffd46f');
+    bezelGradient.addColorStop(0.7, '#d4a261');
+    bezelGradient.addColorStop(1, '#c48d4a');
 
     ctx.beginPath();
-    ctx.arc(0, 0, 78, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(255,255,255,0.2)";
-    ctx.lineWidth = 2;
+    ctx.arc(0, 0, outerRadius, 0, Math.PI * 2);
+    ctx.fillStyle = bezelGradient;
+    ctx.fill();
+
+    for (let i = 0; i < 24; i += 1) {
+        const angle = (Math.PI * 2 / 24) * i;
+        const radius = outerRadius - 10;
+        const size = i % 2 === 0 ? 6 : 4;
+        ctx.beginPath();
+        ctx.arc(Math.cos(angle) * radius, Math.sin(angle) * radius, size, 0, Math.PI * 2);
+        ctx.fillStyle = i % 2 === 0 ? '#ffffff' : '#fcefbe';
+        ctx.fill();
+    }
+
+    ctx.beginPath();
+    ctx.arc(0, 0, innerRadius, 0, Math.PI * 2);
+    ctx.fillStyle = '#fffdf7';
+    ctx.fill();
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
     ctx.stroke();
 
     for (let i = 0; i < 12; i += 1) {
         const angle = (Math.PI / 6) * i;
         ctx.beginPath();
-        ctx.moveTo(Math.cos(angle) * 72, Math.sin(angle) * 72);
-        ctx.lineTo(Math.cos(angle) * 84, Math.sin(angle) * 84);
-        ctx.strokeStyle = "rgba(255,255,255,0.55)";
-        ctx.lineWidth = 2;
+        ctx.moveTo(Math.cos(angle) * 70, Math.sin(angle) * 70);
+        ctx.lineTo(Math.cos(angle) * 88, Math.sin(angle) * 88);
+        ctx.strokeStyle = '#a57f26';
+        ctx.lineWidth = 4;
         ctx.stroke();
     }
+
+    drawSubdial(-45, -20);
+    drawSubdial(45, -20);
 
     const sec = now.getSeconds();
     const min = now.getMinutes();
     const hr = now.getHours() % 12;
 
-    drawHand(hr * 30 + min / 2, 56, 6, "#ffffff");
-    drawHand(min * 6, 74, 4, "#31d3ff");
-    drawHand(sec * 6, 86, 2, "#ff6b6b");
-    ctx.restore();
+    drawHand(hr * 30 + min / 2, 52, 7, '#4b3514');
+    drawHand(min * 6, 78, 5, '#1f78d8');
+    drawHand(sec * 6, 86, 2, '#e14f4f');
 
+    ctx.beginPath();
+    ctx.fillStyle = '#2f2414';
+    ctx.arc(0, 0, 7, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
     requestAnimationFrame(drawClock);
+}
+
+function drawSubdial(x, y) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.beginPath();
+    ctx.arc(0, 0, 18, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#d2b873';
+    ctx.stroke();
+    ctx.restore();
 }
 
 function drawHand(angle, length, width, color) {

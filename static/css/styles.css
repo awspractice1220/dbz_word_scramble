@@ -6,9 +6,9 @@ body, html {
     margin: 0;
     min-height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #050505;
-    color: #fff;
-    cursor: url('/static/cursors/jordan1.png'), auto;
+    background: #f9f6ef;
+    color: #111;
+    cursor: url('/static/cursors/jordan01.png'), auto;
 }
 
 body {
@@ -19,10 +19,10 @@ body {
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(circle at top left, rgba(255, 215, 0, 0.25), transparent 24%),
-        radial-gradient(circle at bottom right, rgba(34, 211, 238, 0.18), transparent 28%),
-        linear-gradient(140deg, #060606 0%, #1b0f02 45%, #0a1117 100%);
-    animation: auraPulse 6s ease-in-out infinite alternate;
+        radial-gradient(circle at top left, rgba(255, 238, 166, 0.85), transparent 25%),
+        radial-gradient(circle at bottom right, rgba(103, 189, 255, 0.35), transparent 30%),
+        linear-gradient(140deg, #fff8e8 0%, #f5f1de 35%, #eae4d1 100%);
+    animation: auraPulse 9s ease-in-out infinite alternate;
     z-index: -2;
 }
 
@@ -55,11 +55,11 @@ body {
     grid-template-columns: 0.9fr 1.1fr;
     gap: 24px;
     padding: 24px;
-    border: 1px solid rgba(255, 215, 0, 0.25);
-    border-radius: 28px;
-    background: rgba(7, 7, 7, 0.78);
-    backdrop-filter: blur(18px);
-    box-shadow: 0 0 40px rgba(255, 193, 7, 0.2), inset 0 0 30px rgba(255,255,255,0.04);
+    border: 1px solid rgba(255, 193, 7, 0.33);
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(37, 38, 49, 0.12);
 }
 
 .watch-panel {
@@ -70,18 +70,37 @@ body {
     gap: 16px;
     padding: 18px;
     border-radius: 24px;
-    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,0,0,0.45));
+    background: linear-gradient(145deg, rgba(252, 247, 238, 0.95), rgba(255, 237, 190, 0.82));
+    border: 1px solid rgba(255, 206, 105, 0.35);
 }
 
 .luxury-clock {
-    width: 240px;
-    height: 240px;
+    width: 280px;
+    height: 280px;
     display: grid;
     place-items: center;
-    border-radius: 50%;
-    padding: 10px;
-    background: radial-gradient(circle at 30% 30%, #353535, #050505 70%);
-    box-shadow: 0 0 28px rgba(255, 215, 0, 0.35), inset 0 0 20px rgba(255,255,255,0.08);
+    border-radius: 40%;
+    padding: 12px;
+    background: radial-gradient(circle at 40% 35%, #fffefc, #efe4cd 55%, #cfae6f 90%);
+    box-shadow: 0 10px 30px rgba(117, 52, 20, 0.18), inset 0 0 24px rgba(255,255,255,0.35);
+}
+
+.watch-face-shell {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 5px rgba(255,255,255,0.45), inset 0 0 40px rgba(255, 223, 128, 0.3);
+}
+
+.watch-gem-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.45) 0%, transparent 12%),
+                      radial-gradient(circle at 80% 22%, rgba(255,255,255,0.35) 0%, transparent 10%),
+                      radial-gradient(circle at 50% 80%, rgba(255,255,255,0.25) 0%, transparent 15%);
 }
 
 .watch-copy {
@@ -112,8 +131,8 @@ body {
 .game-panel {
     padding: 22px;
     border-radius: 24px;
-    background: linear-gradient(140deg, rgba(255,255,255,0.05), rgba(18,18,18,0.85));
-    border: 1px solid rgba(34, 211, 238, 0.16);
+    background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255, 244, 224, 0.9));
+    border: 1px solid rgba(255, 206, 105, 0.3);
 }
 
 .status-row {
@@ -146,7 +165,7 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.2em;
     font-size: 0.75rem;
-    color: #8fd8ec;
+    color: #b37a1d;
 }
 
 .scrambled {
@@ -201,6 +220,20 @@ button {
 
 button:hover {
     transform: translateY(-2px);
+}
+
+.reset-btn:hover {
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.24);
+}
+
+.stat-card {
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.72);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
 }
 
 .submit-btn {
