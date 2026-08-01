@@ -376,6 +376,36 @@ button {
     transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
+.combo-panel {
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(22, 34, 68, 0.95);
+    border: 1px solid rgba(91, 159, 255, 0.18);
+    box-shadow: inset 0 0 20px rgba(40, 88, 170, 0.12);
+}
+
+.combo-title {
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    color: #99caff;
+    margin-bottom: 8px;
+}
+
+.combo-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #f5f9ff;
+    text-shadow: 0 0 18px rgba(102, 199, 255, 0.4);
+    margin-bottom: 8px;
+}
+
+.combo-timer {
+    font-size: 0.95rem;
+    color: #d1e6ff;
+}
+
 button:hover {
     transform: translateY(-2px);
 }

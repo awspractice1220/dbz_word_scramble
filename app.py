@@ -29,6 +29,7 @@ game_state = {
     "score": 0,
     "difficulty": 1,
     "streak": 0,
+    "combo": 1,
     "last_word": "",
     "last_hint": "",
     "last_message": "A new challenge is ready.",
@@ -83,7 +84,8 @@ def check_answer():
     correct_word = normalize_answer(game_state["last_word"])
 
     if user_answer == correct_word:
-        game_state["score"] += 10 + (game_state["difficulty"] * 5)
+        game_state["combo"] = min(5, game_state["combo"] + 1)
+        game_state["score"] += 10 + (game_state["difficulty"] * 5) + ((game_state["combo"] - 1) * 5)
         game_state["difficulty"] += 1
         game_state["streak"] += 1
         game_state["last_message"] = "Amazing! The Saiyan energy is rising."
@@ -92,9 +94,11 @@ def check_answer():
             "score": game_state["score"],
             "difficulty": game_state["difficulty"],
             "streak": game_state["streak"],
+            "combo": game_state["combo"],
             "message": game_state["last_message"],
         })
 
+    game_state["combo"] = 1
     game_state["streak"] = 0
     game_state["last_message"] = "Not quite. Try another Dragon Ball legend."
     return jsonify({
@@ -112,6 +116,7 @@ def get_score():
         "score": game_state["score"],
         "difficulty": game_state["difficulty"],
         "streak": game_state["streak"],
+        "combo": game_state["combo"],
         "message": game_state["last_message"],
     })
 
@@ -122,6 +127,7 @@ def reset_game():
         "score": 0,
         "difficulty": 1,
         "streak": 0,
+        "combo": 1,
         "last_word": "",
         "last_hint": "",
         "last_message": "The arena has reset. A new challenge awaits.",

@@ -21,11 +21,17 @@ const scoreValueEl = document.getElementById("scoreValue");
 const difficultyValueEl = document.getElementById("difficultyValue");
 const streakValueEl = document.getElementById("streakValue");
 const statusBadgeEl = document.getElementById("statusBadge");
+const comboValueEl = document.getElementById("comboValue");
+const comboTimerEl = document.getElementById("comboTimer");
 const characterArtEl = document.getElementById("characterArt");
 const characterLabelEl = document.getElementById("characterLabel");
 const leaderboardListEl = document.getElementById("leaderboardList");
 const leaderboardKey = "dbzWordScrambleLeaderboard";
 let leaderboard = [];
+let comboValue = 1;
+let comboSeconds = 0;
+let comboTimerId = null;
+const COMBO_START_SECONDS = 10;
 
 async function getNewWord() {
     const res = await fetch("/api/new-word");
@@ -40,6 +46,7 @@ async function getNewWord() {
     characterLabelEl.textContent = data.character_name || "Featured fighter";
     answerInput.value = "";
     answerInput.focus();
+    updateComboUI();
 }
 
 async function submitAnswer() {
@@ -62,8 +69,19 @@ async function submitAnswer() {
     statusBadgeEl.textContent = data.message;
 
     if (data.correct) {
+        comboValue = data.combo || comboValue + 1;
+        comboSeconds = COMBO_START_SECONDS;
+        playSound("correct");
+        updateComboUI();
+        startComboTimer();
         updateLeaderboard(data.score);
         setTimeout(getNewWord, 600);
+    } else {
+        comboValue = 1;
+        comboSeconds = 0;
+        updateComboUI();
+        stopComboTimer();
+        playSound("wrong");
     }
 }
 
@@ -117,6 +135,65 @@ function updateLeaderboard(score) {
 function initLeaderboard() {
     leaderboard = getSavedLeaderboard();
     renderLeaderboard();
+}
+
+function playSound(kind) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) {
+        return;
+    }
+    const ctx = new AudioContext();
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+    gain.gain.value = 0.15;
+
+    if (kind === "correct") {
+        oscillator.type = "triangle";
+        oscillator.frequency.value = 520;
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.24);
+    } else {
+        oscillator.type = "square";
+        oscillator.frequency.value = 240;
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+    }
+
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + 0.25);
+}
+
+function updateComboUI() {
+    comboValueEl.textContent = `x${comboValue}`;
+    comboTimerEl.textContent = `${comboSeconds}s`;
+    if (comboValue > 1) {
+        comboValueEl.classList.add("combo-active");
+    } else {
+        comboValueEl.classList.remove("combo-active");
+    }
+}
+
+function startComboTimer() {
+    stopComboTimer();
+    comboTimerId = setInterval(() => {
+        comboSeconds -= 1;
+        if (comboSeconds <= 0) {
+            comboValue = 1;
+            comboSeconds = 0;
+            stopComboTimer();
+        }
+        updateComboUI();
+    }, 1000);
+}
+
+function stopComboTimer() {
+    if (comboTimerId) {
+        clearInterval(comboTimerId);
+        comboTimerId = null;
+    }
 }
 
 async function resetGame() {
