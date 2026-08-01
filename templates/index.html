@@ -2,51 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DBZ Word Scramble</title>
     <link rel="stylesheet" href="/static/css/styles.css">
     <script defer src="/static/js/game.js"></script>
 </head>
-
 <body>
-
-    <!-- Cinematic DBZ Background -->
     <div class="dbz-background"></div>
-    <img src="/static/images/dbz01.png" class="dbz-character">
-    <img src="/static/images/dbz02.png" class="dbz-character">
-    <img src="/static/images/watch01.png" class="luxury-watch">
 
-
-    <!-- Main Container -->
-    <div class="game-container">
-
-        <!-- Luxury Jacob & Co Clock -->
-        <div class="luxury-clock">
-            <canvas id="clockCanvas" width="200" height="200"></canvas>
-            <img src="/static/images/watch01.png" class="watch-overlay">
-        </div>
-
-
-        <!-- Game Panel -->
-        <div class="game-panel">
-            <h1 class="title">DBZ Word Scramble</h1>
-
-            <div class="scramble-box">
-                <p id="scrambledWord" class="scrambled">Loading...</p>
+    <div class="page-shell">
+        <div class="hero-card">
+            <div class="watch-panel">
+                <div class="luxury-clock">
+                    <canvas id="clockCanvas" width="220" height="220"></canvas>
+                </div>
+                <div class="watch-copy">
+                    <p class="eyebrow">Jacob & Co-inspired luxury edition</p>
+                    <h1>Dragon Ball Word Scramble</h1>
+                    <p class="subtext">Unravel the names of your favorite DBZ legends and power up your streak.</p>
+                </div>
             </div>
 
-            <input id="answerInput" class="answer-input" placeholder="Type your answer...">
+            <div class="game-panel">
+                <div class="status-row">
+                    <span id="statusBadge" class="status-badge">Ready to battle</span>
+                </div>
 
-            <button id="submitBtn" class="submit-btn">Submit</button>
+                <div class="scramble-box">
+                    <p class="label">Scrambled character</p>
+                    <p id="scrambledWord" class="scrambled">Loading...</p>
+                </div>
 
-            <div class="score-box">
-                <p>Score: <span id="scoreValue">0</span></p>
-                <p>Difficulty: <span id="difficultyValue">1</span></p>
+                <div class="hint-box">
+                    <p class="label">Hint</p>
+                    <p id="hintValue">A fresh challenge is loading.</p>
+                </div>
+
+                <input id="answerInput" class="answer-input" placeholder="Type the character name..." autocomplete="off">
+
+                <div class="button-row">
+                    <button id="submitBtn" class="submit-btn">Submit</button>
+                    <button id="newWordBtn" class="newword-btn">New Round</button>
+                    <button id="resetBtn" class="reset-btn">Reset</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Score</span>
+                        <span id="scoreValue" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Difficulty</span>
+                        <span id="difficultyValue" class="stat-value">1</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Streak</span>
+                        <span id="streakValue" class="stat-value">0</span>
+                    </div>
+                </div>
             </div>
-
-            <button id="newWordBtn" class="newword-btn">New Word</button>
         </div>
-
     </div>
-
 </body>
 </html>
